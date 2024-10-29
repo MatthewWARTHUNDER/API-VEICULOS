@@ -1,11 +1,15 @@
 const express = require('express')
+const cors = require('cors')
 const db = require('./db')
 const app = express();
-
 app.use(express.json())
-
 const port = 3000;
 
+
+//npm i cors
+app.use(cors({
+    origin: '*'
+}))
 
 let veiculo = []
 
@@ -19,6 +23,7 @@ app.get('/params/:id', (req, res) => {
 // cadastrar o veículo com o banco de dados (mySQL)
 app.post('/cadastrar', (req, res) =>{
     const{marca, modelo, ano, cor, proprietario} = req.body
+    console.log('O cliente requisitou uma rota')
     db.query(
         `INSERT INTO veiculos (marca, modelo, ano, cor, proprietario) VALUES (?,?,?,?,?)`,
         [marca, modelo, Number(ano), cor, proprietario],
@@ -53,6 +58,7 @@ app.put('/update/:id', (req, res) => {
     const {id} = req.params
     const {marca, modelo, ano, proprietario, cor} = req.body 
 
+    console.log(marca, modelo, ano, cor, proprietario, id)
 
     db.query(
         `UPDATE veiculos set marca = ?, modelo = ?, ano = ?, cor = ?, proprietario = ? WHERE id = ?`,
