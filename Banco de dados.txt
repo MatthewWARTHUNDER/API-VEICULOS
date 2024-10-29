@@ -1,0 +1,18 @@
+create database aula;
+
+use aula;
+
+create table veiculos(
+id INT NOT NULL auto_increment  PRIMARY KEY,
+marcar VARCHAR(60),
+modelo VARCHAR(60),
+proprietario VARCHAR(60),
+ano INT,
+cor VARCHAR(60)
+
+);
+
+DROP TABLE veiculos;
+select * from veiculos;
+ALTER TABLE veiculos RENAME COLUMN marcar TO marca;
+DELETE FROM veiculos WHERE id = 0;
