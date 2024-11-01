@@ -1,6 +1,6 @@
 import { useEffect, useState, useTransition } from 'react'
 import axios  from 'axios'
-import './App.css'
+import Navbar from './components/Navbar'
 
 function App() {
 
@@ -86,6 +86,7 @@ function App() {
 
   return (
     <>
+    <Navbar/>
       <div className="card">
         <form >
 
@@ -140,3 +141,4 @@ function App() {
 }
 
 export default App
+
