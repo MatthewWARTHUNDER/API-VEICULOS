@@ -5,3 +5,4 @@ Atividade de API para os veiculos.
 * - node.js(para o backend)
 * - tailwind.css (framework)
 * - Mysql (Banco de dados)
+* - Postman (Ferramenta para teste de APIs)
