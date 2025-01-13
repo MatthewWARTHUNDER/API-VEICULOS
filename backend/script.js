@@ -8,11 +8,13 @@ app.use(cors());
 
 // Rota para cadastrar um novo veículo
 app.post('/cadastrar', (req, res) => {
-    const { marca, modelo, ano, cor, proprietario } = req.body;
-    const query = `INSERT INTO veiculos (marca, modelo, ano, cor, proprietario) 
-                VALUES ('${marca}', '${modelo}', ${ano}, '${cor}', '${proprietario}')`;
+    const { marca, modelo, ano, cor, proprietario, placa } = req.body;
+    
+    // Utilizando prepared statements para evitar SQL injection
+    const query = `INSERT INTO veiculos (marca, modelo, ano, cor, proprietario, placa) 
+                VALUES (?, ?, ?, ?, ?, ?)`;
 
-    connection.query(query, (err, result) => {
+    connection.query(query, [marca, modelo, ano, cor, proprietario, placa], (err, result) => {
         if (err) {
             res.status(500).send({ message: 'Erro ao cadastrar veículo', error: err });
         } else {
@@ -35,10 +37,12 @@ app.get('/veiculos', (req, res) => {
 // Rota para atualizar um veículo
 app.put('/update/:id', (req, res) => {
     const { id } = req.params;
-    const { marca, modelo, ano, cor, proprietario } = req.body;
-    const query = `UPDATE veiculos SET marca = '${marca}', modelo = '${modelo}', ano = ${ano}, cor = '${cor}', proprietario = '${proprietario}' WHERE id = ${id}`;
+    const { marca, modelo, ano, cor, proprietario, placa } = req.body;
 
-    connection.query(query, (err, result) => {
+    // Usando prepared statements para atualização
+    const query = `UPDATE veiculos SET marca = ?, modelo = ?, ano = ?, cor = ?, proprietario = ?, placa = ? WHERE id = ?`;
+
+    connection.query(query, [marca, modelo, ano, cor, proprietario, placa, id], (err, result) => {
         if (err) {
             res.status(500).send({ message: 'Erro ao atualizar veículo', error: err });
         } else {
@@ -50,9 +54,9 @@ app.put('/update/:id', (req, res) => {
 // Rota para deletar um veículo
 app.delete('/deletar/:id', (req, res) => {
     const { id } = req.params;
-    const query = `DELETE FROM veiculos WHERE id = ${id}`;
+    const query = `DELETE FROM veiculos WHERE id = ?`;
 
-    connection.query(query, (err, result) => {
+    connection.query(query, [id], (err, result) => {
         if (err) {
             res.status(500).send({ message: 'Erro ao deletar veículo', error: err });
         } else {

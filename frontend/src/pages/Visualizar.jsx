@@ -35,6 +35,7 @@ export default function Visualizar() {
                             <th className="px-4 py-2 border-b">Ano</th>
                             <th className="px-4 py-2 border-b">Cor</th>
                             <th className="px-4 py-2 border-b">Proprietário</th>
+                            <th className="px-4 py-2 border-b">Placa</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -46,6 +47,7 @@ export default function Visualizar() {
                                 <td className="px-4 py-2 border-b">{veiculo.ano}</td>
                                 <td className="px-4 py-2 border-b">{veiculo.cor}</td>
                                 <td className="px-4 py-2 border-b">{veiculo.proprietario}</td>
+                                <td className="px-4 py-2 border-b">{veiculo.placa}</td>
                             </tr>
                         ))}
                     </tbody>

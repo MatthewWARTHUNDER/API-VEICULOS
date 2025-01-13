@@ -9,15 +9,17 @@ export function Atualizar() {
     const [ano, setAno] = useState(0);
     const [proprietario, setProprietario] = useState("");
     const [cor, setCor] = useState("");
+    const [placa, setPlaca] = useState("");
     const [message, setMessage] = useState("");
 
     useEffect(() => {
-        console.log(id, marca, modelo, ano, cor, proprietario);
-    }, [id, marca, modelo, ano, cor, proprietario]);
+        console.log(id, marca, modelo, ano, cor, proprietario, placa);
+    }, [id, marca, modelo, ano, cor, proprietario, placa]);
 
     async function updateVehicle() {
         try {
-            await axios.put(`http://localhost:3000/update/${id}`, { marca, modelo, ano, cor, proprietario });
+            // Incluindo a placa na requisição de atualização
+            await axios.put(`http://localhost:3000/update/${id}`, { marca, modelo, ano, cor, proprietario, placa });
             setMessage("Veículo atualizado com sucesso!"); 
         } catch (error) {
             setMessage("Erro ao atualizar veículo.");
@@ -100,6 +102,17 @@ export function Atualizar() {
                         />
                     </div>
 
+                    <div>
+                        <label htmlFor="placa" className="block text-sm font-medium text-gray-700">Placa</label>
+                        <input
+                            type="text"
+                            id="placa"
+                            value={placa}
+                            onChange={(e) => setPlaca(e.target.value)}
+                            className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                        />
+                    </div>
+
                     <div className="flex space-x-4">
                         <button
                             type="submit"
@@ -112,7 +125,7 @@ export function Atualizar() {
 
                 {message && (
                     <div className="mt-4 text-center text-lg text-blue-600">{message}</div>  
-        )}
+                )}
             </div>
         </>
     );
