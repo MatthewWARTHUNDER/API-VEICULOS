@@ -1,239 +1,67 @@
-const express = require('express')
-const cors = require('cors')
-const db = require('./db')
+const express = require('express');
 const app = express();
-app.use(express.json())
-const port = 3000;
+const cors = require('cors');
+const connection = require('./db');
 
+app.use(express.json());
+app.use(cors());
 
-//npm i cors
-app.use(cors({
-    origin: '*'
-}))
+// Rota para cadastrar um novo veículo
+app.post('/cadastrar', (req, res) => {
+    const { marca, modelo, ano, cor, proprietario } = req.body;
+    const query = `INSERT INTO veiculos (marca, modelo, ano, cor, proprietario) 
+                VALUES ('${marca}', '${modelo}', ${ano}, '${cor}', '${proprietario}')`;
 
-let veiculo = []
-
-
-app.get('/params/:id', (req, res) => {
-    const {id} = req.params
-    res.send(id)
-
-})
-
-// cadastrar o veículo com o banco de dados (mySQL)
-app.post('/cadastrar', (req, res) =>{
-    const{marca, modelo, ano, cor, proprietario} = req.body
-    console.log('O cliente requisitou uma rota')
-    db.query(
-        `INSERT INTO veiculos (marca, modelo, ano, cor, proprietario) VALUES (?,?,?,?,?)`,
-        [marca, modelo, Number(ano), cor, proprietario],
-        function(err, results, fields){
-            if(err){
-                console.error('Erro na inserção', err)
-                return;
-            }
-            console.log(results)
-            console.log(fields)
+    connection.query(query, (err, result) => {
+        if (err) {
+            res.status(500).send({ message: 'Erro ao cadastrar veículo', error: err });
+        } else {
+            res.status(201).send({ message: 'Veículo cadastrado com sucesso', id: result.insertId });
         }
-    )
-    res.send(`Veículo cadastrado com sucesso!\n marca:${marca}\nModelo:${modelo}\nano: ${ano}\ncor: ${cor}\n proprietário: ${proprietario}`)
-})
+    });
+});
 
+// Rota para visualizar todos os veículos
+app.get('/veiculos', (req, res) => {
+    connection.query('SELECT * FROM veiculos', (err, result) => {
+        if (err) {
+            res.status(500).send({ message: 'Erro ao obter veículos', error: err });
+        } else {
+            res.status(200).json(result);
+        }
+    });
+});
 
-// cadastrar o veículo
-// app.post('/cadastrar', (req, res) => {
-//     const {marca, modelo, cor, ano, proprietario} = req.body;
-//     const id = veiculo.length;
-//     veiculo.push({proprietario, marca, modelo, cor, id, ano});
-//     res.send(`Veículo recebido com sucesso!\n esse veículo foi ${modelo}\n marca: ${marca}\n cor: ${cor}\n ID: ${id}\n ano: ${ano}\n proprietário: ${proprietario}`)
-// })
-
-
-
-
-
-// atualizar as informações do veículo
+// Rota para atualizar um veículo
 app.put('/update/:id', (req, res) => {
+    const { id } = req.params;
+    const { marca, modelo, ano, cor, proprietario } = req.body;
+    const query = `UPDATE veiculos SET marca = '${marca}', modelo = '${modelo}', ano = ${ano}, cor = '${cor}', proprietario = '${proprietario}' WHERE id = ${id}`;
 
-    const {id} = req.params
-    const {marca, modelo, ano, proprietario, cor} = req.body 
-
-    console.log(marca, modelo, ano, cor, proprietario, id)
-
-    db.query(
-        `UPDATE veiculos set marca = ?, modelo = ?, ano = ?, cor = ?, proprietario = ? WHERE id = ?`,
-        [marca, modelo, Number(ano), cor, proprietario, id],
-        function(err, results, fields){
-            if(err){
-                console.error('Erro na inserção', err)
-                return;
-            }
-            console.log(results)
-            console.log(fields)
-            
-            res.json(results)
+    connection.query(query, (err, result) => {
+        if (err) {
+            res.status(500).send({ message: 'Erro ao atualizar veículo', error: err });
+        } else {
+            res.status(200).send({ message: 'Veículo atualizado com sucesso' });
         }
+    });
+});
 
-        
-    )
-    //const {marca, modelo, ano, cor, proprietario} = req.body;
-    //try{
-      //  veiculo [ id - 1] = {id, modelo, marca, ano, cor, proprietario}
-        //res.send(`os dados do veículo foi alterado! o ID foi: ${id}\n modelo: ${modelo}\n marca: ${marca}\n ano: ${ano}\n cor: ${cor}\n\n propriertário: ${proprietario} `);
-    //}catch(err){
-      //  res.send("Veículo não encontrado!")
-    //}   
-})
+// Rota para deletar um veículo
+app.delete('/deletar/:id', (req, res) => {
+    const { id } = req.params;
+    const query = `DELETE FROM veiculos WHERE id = ${id}`;
 
-app.delete('/deletarmodelo/:modelo', (req, res) => {
-    const {modelo} = req.params;
-
-
-
-    db.query(
-        `DELETE FROM veiculos WHERE modelo = ?`,
-        [modelo],
-        function(err, results, fields){
-            if(err){
-                console.error('Erro na inserção', err)
-                return;
-            }
-            console.log(results)
-            console.log(fields)
-            
-            res.json(results)
+    connection.query(query, (err, result) => {
+        if (err) {
+            res.status(500).send({ message: 'Erro ao deletar veículo', error: err });
+        } else {
+            res.status(200).send({ message: 'Veículo deletado com sucesso' });
         }
+    });
+});
 
-        
-    )
-    //const initial = veiculo.length;
-    //veiculo = veiculo.filter( car => car.modelo !== modelo);
-
-    //if(veiculo.length < initial){
-      //  res.send('veículo removido com sucesso!')
-    //} else{
-      //  res.status(404).send('Veículo não encontrado')
-    //}
-    
-})
-// deletar o veículo por id
-app.delete('/deletar/:id', (req, res) =>{
-
-    const {id} = req.params;
-
-
-    db.query(
-        `DELETE FROM veiculos WHERE id = ?`,
-        [id],
-        function(err, results, fields){
-            if(err){
-                console.error('Erro na inserção', err)
-                return;
-            }
-            console.log(results)
-            console.log(fields)
-            
-            res.json(results)
-        }
-
-        
-    )
-    //try{
-      //  veiculo.splice(id, 1)
-       // res.send('Veículo removido com sucesso!')
-    //}catch(err){
-      //  res.send(404).json("erro!!")
-    //} 
-})
-
-// visualizar todos os carros sem categoria
-app.get('/selecionarall', (req, res) => {
-    res.send(veiculo)
-
-})
-
-
-// visualizar os carros pelo seu ID
-app.get('/selecionarallporid/:id', (req, res) =>{
-    const {id} = req.params
-
-
-
-    db.query(
-        `SELECT * FROM veiculos WHERE id = ?`,
-        [id],
-        function(err, results, fields){
-            if(err){
-                console.error('Erro na inserção', err)
-                return;
-            }
-            console.log(results)
-            console.log(fields)
-            
-            res.json(results)
-        }
-
-        
-    )
-    //const car = veiculo.length( car => car.id === parseInt(id))
-
-    //if(car){
-      //  res.send(car)
-    //}else{
-      //  res.status(404).send('Veículo não encontrado')
-    //}
-})
-
-// selecionar por ano
-app.get('/selecionarporano/:ano', (req, res) => {
-    const ano = parseInt(req.params.ano);
-
-
-    db.query(
-        `SELECT * FROM veiculos WHERE ano = ?`,
-        [ano],
-        function(err, results, fields){
-            if(err){
-                console.error('Erro na inserção', err)
-                return;
-            }
-            console.log(results)
-            console.log(fields)
-            
-            res.json(results)
-        }
-
-        
-    )
-    
-})
-
-app.get('/selecionarcor/:cor', (req, res) =>{
-
-    const cor = req.params.cor.toLowerCase();
-
-    db.query(
-        `SELECT * FROM veiculos WHERE cor = "azul neon"`,
-        [cor],
-        function(err, results, fields){
-            if(err){
-                console.error('Erro na inserção', err)
-                return;
-            }
-            console.log(results)
-            console.log(fields)
-            
-            res.json(results)
-        }
-
-        
-    )
-})
-
-
-
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
-})
-
-console.log("onça pintada")
+// Inicia o servidor na porta 3000
+app.listen(3000, () => {
+    console.log('Servidor rodando na porta 3000');
+});
