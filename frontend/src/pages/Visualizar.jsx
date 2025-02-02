@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Navbar from "../components/Navbar";
 
 export default function Visualizar() {
     const [veiculos, setVeiculos] = useState([]);
@@ -17,13 +18,8 @@ export default function Visualizar() {
 
     return (
         <>
-            <nav className="w-full bg-sky-700 flex items-center justify-around py-4">
-                <Link to={'/'} className="text-white font-semibold">Cadastrar</Link>
-                <Link to={'/Visualizar'} className="text-white font-semibold">Visualizar</Link>
-                <Link to={'/Deletar'} className="text-white font-semibold">Excluir</Link>
-                <Link to={'/Atualizar'} className="text-white font-semibold">Atualizar</Link>
-            </nav>
-
+            <Navbar />
+                
             <div className="max-w-4xl mx-auto p-8 bg-white shadow-lg rounded-lg mt-8">
                 <h2 className="text-2xl font-semibold mb-6 text-center">Visualizar Veículos</h2>
                 <table className="w-full table-auto border-collapse">

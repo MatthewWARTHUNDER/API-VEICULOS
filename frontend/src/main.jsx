@@ -7,8 +7,8 @@ import {
 } from "react-router-dom";
 import App from './App';
 import Visualizar from './pages/Visualizar';
-import { Deletar } from './pages/Deletar';
 import { Atualizar } from './pages/Atualizar.jsx';
+import { Excluir } from './pages/Excluir.jsx';
 
 
 
@@ -22,8 +22,8 @@ const router = createBrowserRouter([
     element: <Visualizar/>
   },
   {
-    path: "/Deletar",
-    element: <Deletar/>
+    path: "/Excluir",
+    element: <Excluir/>
   },
   {
     path: "/Atualizar",

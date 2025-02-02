@@ -52,7 +52,7 @@ app.put('/update/:id', (req, res) => {
 });
 
 // Rota para deletar um veículo
-app.delete('/deletar/:id', (req, res) => {
+app.delete('/Excluir/:id', (req, res) => {
     const { id } = req.params;
     const query = `DELETE FROM veiculos WHERE id = ?`;
 

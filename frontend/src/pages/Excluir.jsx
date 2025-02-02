@@ -1,14 +1,15 @@
 import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import Navbar from "/Users/Matt/Downloads/API-VEICULOS/frontend/src/components/Navbar";
 
-export function Deletar() {
+export function Excluir() {
     const [id, setId] = useState(0);
     const [message, setMessage] = useState("");
 
     async function deleteVehicle() {
         try {
-            await axios.delete(`http://localhost:3000/deletar/${id}`);
+            await axios.delete(`http://localhost:3000/Excluir/${id}`);
             setMessage("Veículo deletado com sucesso!");
         } catch (error) {
             setMessage("Erro ao deletar o veículo.");
@@ -20,22 +21,13 @@ export function Deletar() {
         deleteVehicle();
     }
 
+
     return (
         <>
-            <nav className="w-full bg-sky-700 flex items-center justify-around">
-                <Link to={"/"} className="text-white">
-                    Cadastrar
-                </Link>
-                <Link to={"/Visualizar"} className="text-white">
-                    Visualizar
-                </Link>
-                <Link to={"/Deletar"} className="text-white">
-                    Excluir
-                </Link>
-                <Link to={"/Atualizar"} className="text-white">
-                    Atualizar
-                </Link>
-            </nav>
+        <Navbar />
+
+                
+
 
             <div className="max-w-md mx-auto p-6 bg-white shadow-md rounded-lg m-20">
                 <h2 className="text-2xl font-semibold text-center mb-4">Deletar Veículo</h2>

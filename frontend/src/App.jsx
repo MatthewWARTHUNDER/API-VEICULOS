@@ -36,7 +36,7 @@ function App() {
 
   async function deleteVehicle() {
     try {
-      await axios.delete(`http://localhost:3000/deletar/${id}`);
+      await axios.delete(`http://localhost:3000/Excluir/${id}`);
       setMessage("Veículo deletado com sucesso!");
     } catch (error) {
       setMessage("Erro ao deletar veículo.");
