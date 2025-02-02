@@ -6,5 +6,5 @@ Atividade de API para os veiculos.
 * - tailwind.css (framework)
 * - Mysql (Banco de dados)
 * - Postman (Ferramenta para teste de APIs)
-  -  obs: já que foi implementado as funções de registrar veículos, deletar, atualizar e visualizar no site, eu já não usei mais o postman para realizar testes dos APIs
+  -  obs: já que foi implementado o CRUD, então, eu não usei mais o postman para realizar testes dos APIs.
   
